@@ -24,11 +24,7 @@ public class UIAnimationsBehaviour : MonoBehaviour
 
     private void Start()
     {
-        menuBackground.gameObject.SetActive(true);
-        for (int i = 0; i < menuButtons.Length; i++)
-        {
-            menuButtons[i].gameObject.SetActive(true);
-        }
+        
     }
     public void StartGame()
     {

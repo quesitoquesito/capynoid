@@ -7,10 +7,8 @@ public class CapyBallBehaviour : MonoBehaviour
 {
     Rigidbody2D capyBallRB;
     //Set min and max speed and direction values to determine the bounds in which the capyBall first launches
-    [SerializeField] float minStartSpeed;
-    [SerializeField] float maxStartSpeed;
-    [SerializeField] float minStartDirection;
-    [SerializeField] float maxStartDirection;
+
+    [SerializeField] Vector2[] launchDirections;
 
     bool ballLaunched;
 
@@ -45,8 +43,10 @@ public class CapyBallBehaviour : MonoBehaviour
         if (PlayerBehaviour.instance.isGameActive)
         {
             gameObject.transform.parent = null;
-            capyBallRB.velocity = new Vector2(Random.Range(minStartDirection, maxStartDirection), Random.Range(minStartSpeed, maxStartSpeed));
+            int selectedLaunchDirection = Random.Range(0, launchDirections.Length);
+            capyBallRB.velocity = launchDirections[selectedLaunchDirection];
             ballLaunched = true;
+            Debug.Log("Selected Launch Option: " + selectedLaunchDirection);
         }
     }
     private void OnCollisionEnter2D(Collision2D collision)
@@ -55,14 +55,19 @@ public class CapyBallBehaviour : MonoBehaviour
         {
             Destroy(collision.gameObject);
         }
-        if (!collision.gameObject.CompareTag("Player"))
+        /*if (!collision.gameObject.CompareTag("Player"))
         {
             ChangeCollisionDirection();
-        }
+        }*/
     }
 
+
+
+
+
+
     //CHANGE
-    private void ChangeCollisionDirection()
+    /*private void ChangeCollisionDirection()
     {
         float velocityDelta = 0.5f;
         float minVelocity = 0.2f;
@@ -78,5 +83,5 @@ public class CapyBallBehaviour : MonoBehaviour
             velocityDelta = Random.value < 0.5f ? velocityDelta : -velocityDelta;
             capyBallRB.velocity += new Vector2(0f, velocityDelta);
         }
-    }
+    }*/
 }

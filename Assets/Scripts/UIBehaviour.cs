@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class UIBehaviour : MonoBehaviour
 {
     [SerializeField] RectTransform pauseCanvas;
+    [SerializeField] RectTransform mainMenuCanvas;
     [SerializeField] TextMeshProUGUI timerText;
     float timer;
     bool isPaused;
@@ -18,7 +19,6 @@ public class UIBehaviour : MonoBehaviour
         pauseCanvas.gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (PlayerBehaviour.instance.isGameActive)
