@@ -44,7 +44,11 @@ public class UIBehaviour : MonoBehaviour
     public void Timer()
     {
         timer += Time.deltaTime;
-        timerText.text = timer.ToString("00:00:00");
+        int hours = (int)(timer / 3600);
+        int minutes = (int)((timer % 3600) / 60);
+        int seconds = (int)(timer % 60);
+        int miliseconds = (int)((timer * 100) % 100);
+        timerText.text = $"{hours}:{minutes:00}:{seconds:00}:{miliseconds:00}";
     }
 
     public void PauseActivate()

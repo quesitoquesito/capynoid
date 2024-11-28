@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class CapyBallBehaviour : MonoBehaviour
 {
-    Rigidbody2D capyBallRB;
+    public static CapyBallBehaviour instance;
+
+    [HideInInspector] public Rigidbody2D capyBallRB;
     //Set min and max speed and direction values to determine the bounds in which the capyBall first launches
 
     [SerializeField] Vector2[] launchDirections;
@@ -19,6 +21,17 @@ public class CapyBallBehaviour : MonoBehaviour
 
     [SerializeField] float capyBallSpawnAnimSpeed;
     [SerializeField] LeanTweenType capyBallSpawnAnimType;
+    void Awake()
+    {
+        if (CapyBallBehaviour.instance == null)
+        {
+            CapyBallBehaviour.instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
 
     void Start()
     {
@@ -68,11 +81,11 @@ public class CapyBallBehaviour : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Waves"))
         {
-            Restart();
+            LivesPointsBehaviour.instance.DisplayLives();
         }
     }
 
-    void Restart()
+    public void Restart()
     {
         //Set velocity to 0
         capyBallRB.velocity = Vector2.zero;

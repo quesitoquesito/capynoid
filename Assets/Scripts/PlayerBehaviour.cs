@@ -13,7 +13,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     bool isFacingRight = true;
 
-    private void Awake()
+    void Awake()
     {
         if (PlayerBehaviour.instance == null)
         {
