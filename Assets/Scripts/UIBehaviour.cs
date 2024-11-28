@@ -44,7 +44,7 @@ public class UIBehaviour : MonoBehaviour
     public void Timer()
     {
         timer += Time.deltaTime;
-        timerText.text = timer.ToString("00:00");
+        timerText.text = timer.ToString("00:00:00");
     }
 
     public void PauseActivate()

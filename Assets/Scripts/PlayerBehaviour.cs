@@ -11,6 +11,8 @@ public class PlayerBehaviour : MonoBehaviour
     [HideInInspector] public bool isGameActive;
     [HideInInspector] public bool hasGameStarted;
 
+    bool isFacingRight = true;
+
     private void Awake()
     {
         if (PlayerBehaviour.instance == null)
@@ -26,20 +28,33 @@ public class PlayerBehaviour : MonoBehaviour
     {
         isGameActive = false;
         hasGameStarted = false;
+        gameObject.GetComponent<Collider2D>().enabled = false;
     }
 
     void Update()
     {
         PlayerMovement();
+        if ((Input.GetAxis("Horizontal") > 0 && !isFacingRight) || (Input.GetAxis("Horizontal") < 0 && isFacingRight))
+        {
+            FlipPlayer();
+        }
     }
 
     void PlayerMovement()
     {
         if (isGameActive && hasGameStarted)
         {
-            Vector2 gameObjectPosition = gameObject.transform.position;
+            Vector3 gameObjectPosition = gameObject.transform.localPosition;
             gameObjectPosition.x = Mathf.Clamp(gameObjectPosition.x + Input.GetAxisRaw("Horizontal") * movementSpeed * Time.deltaTime, -colliderInArea, colliderInArea);
-            transform.position = gameObjectPosition;
+            transform.localPosition = gameObjectPosition;
         }
+    }
+
+    void FlipPlayer()
+    {
+        isFacingRight = !isFacingRight;
+        Vector3 scale = gameObject.transform.localScale;
+        scale.x *= -1;
+        gameObject.transform.localScale = scale;
     }
 }

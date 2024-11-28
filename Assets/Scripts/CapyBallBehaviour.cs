@@ -12,8 +12,13 @@ public class CapyBallBehaviour : MonoBehaviour
 
     bool ballLaunched;
 
+    [SerializeField] Transform player;
+
     //Debug Testing
     Vector2 initialCapyBallPos;
+
+    [SerializeField] float capyBallSpawnAnimSpeed;
+    [SerializeField] LeanTweenType capyBallSpawnAnimType;
 
     void Start()
     {
@@ -34,8 +39,12 @@ public class CapyBallBehaviour : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.G))
         {
             gameObject.transform.position = initialCapyBallPos;
-            ballLaunched=false;
+            ballLaunched = false;
             capyBallRB.velocity = Vector2.zero;
+        }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Restart();
         }
     }
     void LaunchBall()
@@ -46,6 +55,7 @@ public class CapyBallBehaviour : MonoBehaviour
             int selectedLaunchDirection = Random.Range(0, launchDirections.Length);
             capyBallRB.velocity = launchDirections[selectedLaunchDirection];
             ballLaunched = true;
+            PlayerBehaviour.instance.gameObject.GetComponent<Collider2D>().enabled = true;
             Debug.Log("Selected Launch Option: " + selectedLaunchDirection);
         }
     }
@@ -55,33 +65,26 @@ public class CapyBallBehaviour : MonoBehaviour
         {
             Destroy(collision.gameObject);
         }
-        /*if (!collision.gameObject.CompareTag("Player"))
+
+        if (collision.gameObject.CompareTag("Waves"))
         {
-            ChangeCollisionDirection();
-        }*/
+            Restart();
+        }
     }
 
-
-
-
-
-
-    //CHANGE
-    /*private void ChangeCollisionDirection()
+    void Restart()
     {
-        float velocityDelta = 0.5f;
-        float minVelocity = 0.2f;
-
-        if (Mathf.Abs(capyBallRB.velocity.x) < minVelocity)
-        {
-            velocityDelta = Random.value < 0.5f ? velocityDelta : -velocityDelta;
-            capyBallRB.velocity += new Vector2(velocityDelta, 0f);
-        }
-
-        if (Mathf.Abs(capyBallRB.velocity.y) < minVelocity)
-        {
-            velocityDelta = Random.value < 0.5f ? velocityDelta : -velocityDelta;
-            capyBallRB.velocity += new Vector2(0f, velocityDelta);
-        }
-    }*/
+        //Set velocity to 0
+        capyBallRB.velocity = Vector2.zero;
+        //Disable collider to launch
+        PlayerBehaviour.instance.gameObject.GetComponent<Collider2D>().enabled = false;
+        //Set CrocPaddle as parent
+        gameObject.transform.parent = player;
+        //Animation
+        capyBallRB.gameObject.transform.localScale = Vector2.zero;
+        gameObject.transform.localPosition = new Vector2(0.16f, 0.66f);
+        LeanTween.scale(gameObject,Vector2.one, capyBallSpawnAnimSpeed).setEase(capyBallSpawnAnimType);
+        //Set to launch ball
+        ballLaunched = false;
+    }
 }
