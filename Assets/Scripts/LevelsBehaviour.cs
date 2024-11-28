@@ -6,19 +6,25 @@ public class LevelsBehaviour : MonoBehaviour
 {
     public static LevelsBehaviour instance;
 
-    [SerializeField] float easy
+    [HideInInspector] public int wantedLevelDifficulty; //1 - Easy / 2 - Medium
+
+    [SerializeField] int easyLevelCount;
+    [SerializeField] int mediumLevelCount;
+
 
     //Easy Level Designs
-    [SerializeField] Vector2[] easyLevelDesign1;
-    [SerializeField] Vector2[] easyLevelDesign2;
-    [SerializeField] Vector2[] easyLevelDesign3;
-    [SerializeField] Vector2[] easyLevelDesign4;
+    [SerializeField] Vector3[] easyLevelDesign1;
+    [SerializeField] Vector3[] easyLevelDesign2;
+    [SerializeField] Vector3[] easyLevelDesign3;
+    [SerializeField] Vector3[] easyLevelDesign4;
 
     //Medium Level Designs
-    [SerializeField] Vector2[] mediumLevelDesign1;
-    [SerializeField] Vector2[] mediumLevelDesign2;
-    [SerializeField] Vector2[] mediumLevelDesign3;
-    [SerializeField] Vector2[] mediumLevelDesign4;
+    [SerializeField] Vector3[] mediumLevelDesign1;
+    [SerializeField] Vector3[] mediumLevelDesign2;
+    [SerializeField] Vector3[] mediumLevelDesign3;
+    [SerializeField] Vector3[] mediumLevelDesign4;
+
+    Vector3[][] easyLevel;
 
     void Awake()
     {
@@ -31,14 +37,14 @@ public class LevelsBehaviour : MonoBehaviour
             Destroy(this);
         }
     }
-
-    void Start()
+    private void Start()
     {
-        
+
     }
 
-    void Update()
+    public void SelectLevel()
     {
-        
+        int easyLevelSelected = Random.Range(0, easyLevelCount);
+        easyLevel = new Vector3[easyLevelSelected][];
     }
 }
