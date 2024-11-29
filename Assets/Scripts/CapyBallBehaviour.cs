@@ -83,6 +83,10 @@ public class CapyBallBehaviour : MonoBehaviour
         {
             LivesPointsBehaviour.instance.DisplayLives();
         }
+        if (!collision.gameObject.CompareTag("Waves"))
+        {
+            ModifyDirection();
+        }
     }
 
     public void Restart()
@@ -99,5 +103,24 @@ public class CapyBallBehaviour : MonoBehaviour
         LeanTween.scale(gameObject,Vector2.one, capyBallSpawnAnimSpeed).setEase(capyBallSpawnAnimType);
         //Set to launch ball
         ballLaunched = false;
+    }
+
+    void ModifyDirection()
+    {
+        float modifiedAddedV = 0.5f;
+        float minimumV = 0.2f;
+
+        if(Mathf.Abs(capyBallRB.velocity.x) < minimumV)
+        {
+            modifiedAddedV = Random.value < 0.5f ? modifiedAddedV : -modifiedAddedV;
+            capyBallRB.velocity += new Vector2(modifiedAddedV, 0f);
+            Debug.Log("Calling VelocityFix in X");
+        }
+        if (Mathf.Abs(capyBallRB.velocity.y) < minimumV)
+        {
+            modifiedAddedV = Random.value < 0.5f ? modifiedAddedV : -modifiedAddedV;
+            capyBallRB.velocity += new Vector2(0f, modifiedAddedV);
+            Debug.Log("Calling VelocityFix in Y");
+        }
     }
 }
