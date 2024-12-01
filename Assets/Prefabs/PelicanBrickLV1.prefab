@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1722732710876810950}
   - component: {fileID: 8488236863237529965}
   - component: {fileID: 1015711476991001359}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PelicanBrickLV1
   m_TagString: Brick
   m_Icon: {fileID: 0}

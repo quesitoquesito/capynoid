@@ -6,21 +6,30 @@ using UnityEngine;
 public class CapyBallBehaviour : MonoBehaviour
 {
     public static CapyBallBehaviour instance;
-
     [HideInInspector] public Rigidbody2D capyBallRB;
     //Set min and max speed and direction values to determine the bounds in which the capyBall first launches
 
     [SerializeField] Vector2[] launchDirections;
+    [SerializeField] float minMaxLaunchDirections;
+    [SerializeField] float capyBallSpeed;
 
     bool ballLaunched;
 
     [SerializeField] Transform player;
 
-    //Debug Testing
-    Vector2 initialCapyBallPos;
-
     [SerializeField] float capyBallSpawnAnimSpeed;
     [SerializeField] LeanTweenType capyBallSpawnAnimType;
+
+    //Launch Indicator
+    Vector2 capyBallVector;
+
+    [SerializeField] GameObject launchIndicator;
+    float oscillationTime;
+    [SerializeField] float oscillationSpeed;
+    [SerializeField] float oscillationRadius;
+    float minAngle = Mathf.PI / 4;
+    float maxAngle = 3 * (Mathf.PI / 4);
+
     void Awake()
     {
         if (CapyBallBehaviour.instance == null)
@@ -37,8 +46,7 @@ public class CapyBallBehaviour : MonoBehaviour
     {
         capyBallRB = GetComponent<Rigidbody2D>();
         ballLaunched = false;
-        //Debug Testing
-        initialCapyBallPos = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y);
+        launchIndicator.SetActive(true);
     }
 
     void Update()
@@ -48,30 +56,55 @@ public class CapyBallBehaviour : MonoBehaviour
             LaunchBall();
         }
 
-        //Debug Testing
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            gameObject.transform.position = initialCapyBallPos;
-            ballLaunched = false;
-            capyBallRB.velocity = Vector2.zero;
-        }
+
+        //Debug Restart
         if (Input.GetKeyDown(KeyCode.F))
         {
             Restart();
         }
+
+        //Launch Indicator
+        if (PlayerBehaviour.instance.isGameActive && !ballLaunched)
+        {
+            oscillationTime += Time.deltaTime * oscillationSpeed;
+
+            float normalizedAngle = (Mathf.Sin(oscillationTime) + 1) / 2;
+            float angle = Mathf.Lerp(minAngle, maxAngle, normalizedAngle);
+
+            Vector2 position = new Vector2(
+                oscillationRadius * Mathf.Cos(angle),
+                oscillationRadius * Mathf.Sin(angle)
+            );
+            capyBallVector = new Vector2(-position.x, -position.y);
+
+            float zRotation = Mathf.Atan2(position.y, position.x) * Mathf.Rad2Deg - 90f;
+
+            if (launchIndicator != null)
+            {
+                launchIndicator.transform.rotation = Quaternion.Euler(0, 0, -zRotation);
+            }
+        }
     }
+    void FixedUpdate()
+    {
+        if (ballLaunched)
+        {
+            capyBallRB.velocity = capyBallRB.velocity.normalized * capyBallSpeed;
+        }
+    }
+
     void LaunchBall()
     {
         if (PlayerBehaviour.instance.isGameActive)
         {
+            launchIndicator.SetActive(false);
             gameObject.transform.parent = null;
-            int selectedLaunchDirection = Random.Range(0, launchDirections.Length);
-            capyBallRB.velocity = launchDirections[selectedLaunchDirection];
+            capyBallRB.velocity = capyBallVector.normalized * capyBallSpeed;
             ballLaunched = true;
-            PlayerBehaviour.instance.gameObject.GetComponent<Collider2D>().enabled = true;
-            Debug.Log("Selected Launch Option: " + selectedLaunchDirection);
+            PlayerBehaviour.instance.crocPaddle.GetComponent<Collider2D>().enabled = true;
         }
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Brick"))
@@ -83,6 +116,7 @@ public class CapyBallBehaviour : MonoBehaviour
         {
             LivesPointsBehaviour.instance.DisplayLives();
         }
+
         if (!collision.gameObject.CompareTag("Waves"))
         {
             ModifyDirection();
@@ -91,10 +125,11 @@ public class CapyBallBehaviour : MonoBehaviour
 
     public void Restart()
     {
+        oscillationTime = 0f;
         //Set velocity to 0
         capyBallRB.velocity = Vector2.zero;
         //Disable collider to launch
-        PlayerBehaviour.instance.gameObject.GetComponent<Collider2D>().enabled = false;
+        PlayerBehaviour.instance.crocPaddle.GetComponent<Collider2D>().enabled = false;
         //Set CrocPaddle as parent
         gameObject.transform.parent = player;
         //Animation
@@ -103,6 +138,7 @@ public class CapyBallBehaviour : MonoBehaviour
         LeanTween.scale(gameObject,Vector2.one, capyBallSpawnAnimSpeed).setEase(capyBallSpawnAnimType);
         //Set to launch ball
         ballLaunched = false;
+        launchIndicator.SetActive(true);
     }
 
     void ModifyDirection()

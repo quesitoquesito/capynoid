@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7400212008602020025}
   - component: {fileID: 1772288960717498462}
   - component: {fileID: 470491072674524458}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CloudBrickV3
   m_TagString: Brick
   m_Icon: {fileID: 0}

@@ -10,6 +10,7 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField] float colliderInArea;
     [HideInInspector] public bool isGameActive;
     [HideInInspector] public bool hasGameStarted;
+    public GameObject crocPaddle;
 
     bool isFacingRight = true;
 
@@ -28,7 +29,7 @@ public class PlayerBehaviour : MonoBehaviour
     {
         isGameActive = false;
         hasGameStarted = false;
-        gameObject.GetComponent<Collider2D>().enabled = false;
+        crocPaddle.GetComponent<Collider2D>().enabled = false;
     }
 
     void Update()
@@ -53,8 +54,8 @@ public class PlayerBehaviour : MonoBehaviour
     void FlipPlayer()
     {
         isFacingRight = !isFacingRight;
-        Vector3 scale = gameObject.transform.localScale;
+        Vector3 scale = crocPaddle.transform.localScale;
         scale.x *= -1;
-        gameObject.transform.localScale = scale;
+        crocPaddle.transform.localScale = scale;
     }
 }

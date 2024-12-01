@@ -5,7 +5,10 @@ using UnityEngine.UI;
 
 public class UIAnimationsBehaviour : MonoBehaviour
 {
+    public static UIAnimationsBehaviour instance;
+    
     [SerializeField] RectTransform menuBackground;
+    [SerializeField] public RectTransform pauseCanvas;
     [SerializeField] Button[] menuButtons; //0 Start - 1 Options - 2 Quit
     //Button locations and intervals SAVE START BUTTON POS AT START and calculate interval with first and second button
     [SerializeField] int startButtonLocation;
@@ -20,12 +23,25 @@ public class UIAnimationsBehaviour : MonoBehaviour
     [SerializeField] LeanTweenType buttonAnimType;
     [SerializeField] LeanTweenType menuAnimType;
 
+    //Pause Animations
+    [SerializeField] float slowDownDuration;
+    [HideInInspector] public bool isPausing;
+    [HideInInspector] public bool isPaused;
+
     bool continueWithStartup = false;
 
-    private void Start()
+    void Awake()
     {
-        
+        if (UIAnimationsBehaviour.instance == null)
+        {
+            UIAnimationsBehaviour.instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
     }
+
     public void StartGame()
     {
         StartCoroutine(StartGameAnimation());
@@ -53,15 +69,55 @@ public class UIAnimationsBehaviour : MonoBehaviour
         });
         yield return null;
     }
+
     public void PauseGame()
     {
         StartCoroutine(PauseGameAnimation());
     }
+
     IEnumerator PauseGameAnimation()
     {
-        
-        yield return null;
+        isPausing = true;
+
+        float elapsedTime = 0f;
+
+        while (elapsedTime < slowDownDuration)
+        {
+            elapsedTime += Time.unscaledDeltaTime;
+            Time.timeScale = Mathf.Lerp(1f, 0f, elapsedTime / slowDownDuration);
+            Time.fixedDeltaTime = Time.timeScale * 0.02f;
+            yield return null;
+        }
+
+        pauseCanvas.gameObject.SetActive(true);
+        Time.timeScale = 0f;
+        isPaused = true;
+        isPausing = false;
     }
 
+    public void ResumeGame()
+    {
+        StartCoroutine(ResumeGameAnimation());
+    }
 
+    IEnumerator ResumeGameAnimation()
+    {
+        isPausing = true;
+
+        pauseCanvas.gameObject.SetActive(false);
+
+        float elapsedTime = 0f;
+
+        while (elapsedTime < slowDownDuration)
+        {
+            elapsedTime += Time.unscaledDeltaTime;
+            Time.timeScale = Mathf.Lerp(0f, 1f, elapsedTime / slowDownDuration);
+            Time.fixedDeltaTime = Time.timeScale * 0.02f;
+            yield return null;
+        }
+
+        Time.timeScale = 1f;
+        isPaused = false;
+        isPausing = false;
+    }
 }

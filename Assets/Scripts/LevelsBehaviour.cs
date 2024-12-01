@@ -6,25 +6,25 @@ public class LevelsBehaviour : MonoBehaviour
 {
     public static LevelsBehaviour instance;
 
-    [HideInInspector] public int wantedLevelDifficulty; //1 - Easy / 2 - Medium
+    int wantedLevelDifficulty; //1 - Easy / 2 - Medium / 3 - Hard
 
-    [SerializeField] int easyLevelCount;
-    [SerializeField] int mediumLevelCount;
+    [SerializeField] GameObject[] cloudsPrefabs;
+    [SerializeField] Vector2 prefabColliderSize;
+    public LayerMask collisionLayer;
 
+    //Number of levels before calling medium and hard levels
+    [SerializeField] int easyLevelsAmount;
+    [SerializeField] int mediumLevelsAmount;
 
-    //Easy Level Designs
-    [SerializeField] Vector3[] easyLevelDesign1;
-    [SerializeField] Vector3[] easyLevelDesign2;
-    [SerializeField] Vector3[] easyLevelDesign3;
-    [SerializeField] Vector3[] easyLevelDesign4;
+    //Number of clouds to spawn for each level type (select between min and max)
+    [SerializeField] int[] easyCloudsAmount;
+    [SerializeField] int[] mediumCloudsAmount;
+    [SerializeField] int[] hardCloudsAmount;
 
-    //Medium Level Designs
-    [SerializeField] Vector3[] mediumLevelDesign1;
-    [SerializeField] Vector3[] mediumLevelDesign2;
-    [SerializeField] Vector3[] mediumLevelDesign3;
-    [SerializeField] Vector3[] mediumLevelDesign4;
-
-    Vector3[][] easyLevel;
+    //Minimum and maximum Y and X values to generate clouds in (generation area)
+    [SerializeField] float minimumYClouds;
+    [SerializeField] float maximumYClouds;
+    [SerializeField] float minMaxXClouds;
 
     void Awake()
     {
@@ -39,12 +39,33 @@ public class LevelsBehaviour : MonoBehaviour
     }
     private void Start()
     {
-
+        mediumLevelsAmount += easyLevelsAmount;
+        wantedLevelDifficulty = 0;
     }
 
     public void SelectLevel()
     {
-        int easyLevelSelected = Random.Range(0, easyLevelCount);
-        easyLevel = new Vector3[easyLevelSelected][];
+        if (wantedLevelDifficulty <= easyLevelsAmount)
+        {
+            int selectedCloudsAmount = Random.Range(easyCloudsAmount[0], easyCloudsAmount[1]);
+            for (int i = 0; i < selectedCloudsAmount; i++)
+            {
+                float selectedXPosition = Random.Range(-minMaxXClouds, minMaxXClouds);
+                float selectedYPosition = Random.Range(minimumYClouds, maximumYClouds);
+                GameObject selectedPrefab = cloudsPrefabs[Random.Range(0,cloudsPrefabs.Length)];
+                Collider2D overlap = Physics2D.OverlapBox(new Vector2 (selectedXPosition, selectedYPosition), prefabColliderSize, 0f, collisionLayer);
+                if (overlap == null)
+                {
+                    selectedPrefab = Instantiate(selectedPrefab, new Vector2(selectedXPosition, selectedYPosition), Quaternion.identity);
+                    selectedPrefab.transform.parent = gameObject.transform;
+                }
+                else selectedCloudsAmount += 1;
+                if (selectedCloudsAmount == 200)
+                {
+                    Debug.Log("No free position located in time, breaking loop to prevent crash");
+                    break;
+                }
+            }
+        }
     }
 }
