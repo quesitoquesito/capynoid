@@ -78,7 +78,7 @@ public class UIAnimationsBehaviour : MonoBehaviour
     IEnumerator PauseGameAnimation()
     {
         isPausing = true;
-
+        
         float elapsedTime = 0f;
 
         while (elapsedTime < slowDownDuration)
@@ -88,7 +88,7 @@ public class UIAnimationsBehaviour : MonoBehaviour
             Time.fixedDeltaTime = Time.timeScale * 0.02f;
             yield return null;
         }
-
+        
         pauseCanvas.gameObject.SetActive(true);
         Time.timeScale = 0f;
         isPaused = true;

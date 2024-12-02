@@ -10,6 +10,9 @@ public class UIBehaviour : MonoBehaviour
     [SerializeField] TextMeshProUGUI timerText;
     float timer;
     bool completePause;
+
+    [HideInInspector] Vector2 capyDirection;
+
     void Start()
     {
         UIAnimationsBehaviour.instance.isPausing = false;
@@ -30,7 +33,10 @@ public class UIBehaviour : MonoBehaviour
             {
                 UIAnimationsBehaviour.instance.ResumeGame();
             }
-            else UIAnimationsBehaviour.instance.PauseGame();
+            else
+            {
+                UIAnimationsBehaviour.instance.PauseGame();
+            }
         }
     }
 

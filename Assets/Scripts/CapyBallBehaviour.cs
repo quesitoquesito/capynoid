@@ -9,9 +9,8 @@ public class CapyBallBehaviour : MonoBehaviour
     [HideInInspector] public Rigidbody2D capyBallRB;
     //Set min and max speed and direction values to determine the bounds in which the capyBall first launches
 
-    [SerializeField] Vector2[] launchDirections;
     [SerializeField] float minMaxLaunchDirections;
-    [SerializeField] float capyBallSpeed;
+    public float capyBallSpeed;
 
     bool ballLaunched;
 

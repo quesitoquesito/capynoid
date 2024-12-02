@@ -788,7 +788,7 @@ MonoBehaviour:
   easyCloudsAmount: 1000000014000000
   mediumCloudsAmount: 0100000001000000
   hardCloudsAmount: 0200000002000000
-  minimumYClouds: -1
+  minimumYClouds: -0.5
   maximumYClouds: 4.8
   minMaxXClouds: 4
 --- !u!1 &519420028
@@ -1726,11 +1726,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   capyBallRB: {fileID: 0}
-  launchDirections:
-  - {x: 0.3, y: 1}
-  - {x: 0.3, y: 1}
-  - {x: 0.3, y: 1}
-  - {x: 0.3, y: 1}
   minMaxLaunchDirections: 0
   capyBallSpeed: 8
   player: {fileID: 1788297328}
