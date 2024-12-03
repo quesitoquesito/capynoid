@@ -26,6 +26,10 @@ public class LevelsBehaviour : MonoBehaviour
     [SerializeField] float maximumYClouds;
     [SerializeField] float minMaxXClouds;
 
+    [HideInInspector] public int selectedCloudsAmount;
+
+    public int bricksActive;
+
     void Awake()
     {
         if (LevelsBehaviour.instance == null)
@@ -47,7 +51,7 @@ public class LevelsBehaviour : MonoBehaviour
     {
         if (wantedLevelDifficulty <= easyLevelsAmount)
         {
-            int selectedCloudsAmount = Random.Range(easyCloudsAmount[0], easyCloudsAmount[1]);
+            selectedCloudsAmount = Random.Range(easyCloudsAmount[0], easyCloudsAmount[1]);
             for (int i = 0; i < selectedCloudsAmount; i++)
             {
                 float selectedXPosition = Random.Range(-minMaxXClouds, minMaxXClouds);
@@ -66,6 +70,7 @@ public class LevelsBehaviour : MonoBehaviour
                     break;
                 }
             }
+            bricksActive = gameObject.transform.childCount;
         }
     }
 }

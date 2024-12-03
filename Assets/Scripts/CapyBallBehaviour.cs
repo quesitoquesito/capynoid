@@ -109,6 +109,7 @@ public class CapyBallBehaviour : MonoBehaviour
         if (collision.gameObject.CompareTag("Brick"))
         {
             Destroy(collision.gameObject);
+            StartCoroutine(DestroyBricks());
         }
 
         if (collision.gameObject.CompareTag("Waves"))
@@ -120,6 +121,18 @@ public class CapyBallBehaviour : MonoBehaviour
         {
             ModifyDirection();
         }
+    }
+
+    IEnumerator DestroyBricks()
+    {
+        yield return 0.1f;
+        LevelsBehaviour.instance.bricksActive = LevelsBehaviour.instance.gameObject.transform.childCount;
+        if (LevelsBehaviour.instance.bricksActive <= 0)
+        {
+            LevelsBehaviour.instance.SelectLevel();
+            Restart();
+        }
+        yield return null;
     }
 
     public void Restart()
@@ -142,8 +155,8 @@ public class CapyBallBehaviour : MonoBehaviour
 
     void ModifyDirection()
     {
-        float modifiedAddedV = 0.5f;
-        float minimumV = 0.2f;
+        float modifiedAddedV = 1f;
+        float minimumV = 0.5f;
 
         if(Mathf.Abs(capyBallRB.velocity.x) < minimumV)
         {
