@@ -48,6 +48,7 @@ public class UIAnimationsBehaviour : MonoBehaviour
     }
     IEnumerator StartGameAnimation()
     {
+        LevelsBehaviour.instance.SelectLevel();
         LeanTween.moveLocalY(menuButtons[2].gameObject, buttonPosOutOfSight, buttonAnimSpeed).setEase(buttonAnimType);
         yield return new WaitForSeconds(buttonAnimInterval);
         LeanTween.moveLocalY(menuButtons[1].gameObject, buttonPosOutOfSight, buttonAnimSpeed + 0.1f).setEase(buttonAnimType);
@@ -72,7 +73,9 @@ public class UIAnimationsBehaviour : MonoBehaviour
 
     public void PauseGame()
     {
-        StartCoroutine(PauseGameAnimation());
+        CapyBallBehaviour.instance.capyBallStoredDirection = CapyBallBehaviour.instance.capyBallRB.velocity;
+        isPaused = true;
+        //StartCoroutine(PauseGameAnimation());
     }
 
     IEnumerator PauseGameAnimation()
@@ -97,7 +100,9 @@ public class UIAnimationsBehaviour : MonoBehaviour
 
     public void ResumeGame()
     {
-        StartCoroutine(ResumeGameAnimation());
+        isPaused = false;
+        CapyBallBehaviour.instance.capyBallRB.velocity = CapyBallBehaviour.instance.capyBallStoredDirection.normalized;
+        //StartCoroutine(ResumeGameAnimation());
     }
 
     IEnumerator ResumeGameAnimation()

@@ -7,10 +7,12 @@ public class CapyBallBehaviour : MonoBehaviour
 {
     public static CapyBallBehaviour instance;
     [HideInInspector] public Rigidbody2D capyBallRB;
-    //Set min and max speed and direction values to determine the bounds in which the capyBall first launches
 
-    [SerializeField] float minMaxLaunchDirections;
-    public float capyBallSpeed;
+    public float easyCapyBallSpeed;
+    public float mediumCapyBallSpeed;
+    public float hardCapyBallSpeed;
+
+    [HideInInspector] public float capyBallSpeed;
 
     bool ballLaunched;
 
@@ -28,6 +30,8 @@ public class CapyBallBehaviour : MonoBehaviour
     [SerializeField] float oscillationRadius;
     float minAngle = Mathf.PI / 4;
     float maxAngle = 3 * (Mathf.PI / 4);
+
+    [HideInInspector] public Vector2 capyBallStoredDirection;
 
     void Awake()
     {
@@ -86,9 +90,13 @@ public class CapyBallBehaviour : MonoBehaviour
     }
     void FixedUpdate()
     {
-        if (ballLaunched)
+        if (ballLaunched && !UIAnimationsBehaviour.instance.isPaused)
         {
             capyBallRB.velocity = capyBallRB.velocity.normalized * capyBallSpeed;
+        }
+        else if (UIAnimationsBehaviour.instance.isPaused)
+        {
+            capyBallRB.velocity = capyBallRB.velocity.normalized * 0;
         }
     }
 
@@ -129,6 +137,7 @@ public class CapyBallBehaviour : MonoBehaviour
         LevelsBehaviour.instance.bricksActive = LevelsBehaviour.instance.gameObject.transform.childCount;
         if (LevelsBehaviour.instance.bricksActive <= 0)
         {
+            LevelsBehaviour.instance.wantedLevelDifficulty += 1;
             LevelsBehaviour.instance.SelectLevel();
             Restart();
         }

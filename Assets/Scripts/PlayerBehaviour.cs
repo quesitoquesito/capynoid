@@ -6,7 +6,12 @@ public class PlayerBehaviour : MonoBehaviour
 {
     public static PlayerBehaviour instance;
     
-    [SerializeField] float movementSpeed;
+    public float easyMovementSpeed;
+    public float mediumMovementSpeed;
+    public float hardMovementSpeed;
+
+    [HideInInspector] public float movementSpeed;
+
     [SerializeField] float colliderInArea;
     [HideInInspector] public bool isGameActive;
     [HideInInspector] public bool hasGameStarted;

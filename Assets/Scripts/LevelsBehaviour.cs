@@ -6,7 +6,7 @@ public class LevelsBehaviour : MonoBehaviour
 {
     public static LevelsBehaviour instance;
 
-    int wantedLevelDifficulty; //1 - Easy / 2 - Medium / 3 - Hard
+    public int wantedLevelDifficulty;
 
     [SerializeField] GameObject[] cloudsPrefabs;
     [SerializeField] Vector2 prefabColliderSize;
@@ -52,25 +52,43 @@ public class LevelsBehaviour : MonoBehaviour
         if (wantedLevelDifficulty <= easyLevelsAmount)
         {
             selectedCloudsAmount = Random.Range(easyCloudsAmount[0], easyCloudsAmount[1]);
-            for (int i = 0; i < selectedCloudsAmount; i++)
-            {
-                float selectedXPosition = Random.Range(-minMaxXClouds, minMaxXClouds);
-                float selectedYPosition = Random.Range(minimumYClouds, maximumYClouds);
-                GameObject selectedPrefab = cloudsPrefabs[Random.Range(0,cloudsPrefabs.Length)];
-                Collider2D overlap = Physics2D.OverlapBox(new Vector2 (selectedXPosition, selectedYPosition), prefabColliderSize, 0f, collisionLayer);
-                if (overlap == null)
-                {
-                    selectedPrefab = Instantiate(selectedPrefab, new Vector2(selectedXPosition, selectedYPosition), Quaternion.identity);
-                    selectedPrefab.transform.parent = gameObject.transform;
-                }
-                else selectedCloudsAmount += 1;
-                if (selectedCloudsAmount == 200)
-                {
-                    Debug.Log("No free position located in time, breaking loop to prevent crash");
-                    break;
-                }
-            }
-            bricksActive = gameObject.transform.childCount;
+            PlayerBehaviour.instance.movementSpeed = PlayerBehaviour.instance.easyMovementSpeed;
+            CapyBallBehaviour.instance.capyBallSpeed = CapyBallBehaviour.instance.easyCapyBallSpeed;
         }
+
+        else if (wantedLevelDifficulty > easyLevelsAmount && wantedLevelDifficulty <= mediumLevelsAmount)
+        {
+            selectedCloudsAmount = Random.Range(mediumCloudsAmount[0], mediumCloudsAmount[1]);
+            PlayerBehaviour.instance.movementSpeed = PlayerBehaviour.instance.mediumMovementSpeed;
+            CapyBallBehaviour.instance.capyBallSpeed = CapyBallBehaviour.instance.mediumCapyBallSpeed;
+        }
+
+        else if (wantedLevelDifficulty > mediumLevelsAmount)
+        {
+            selectedCloudsAmount = Random.Range(hardCloudsAmount[0], hardCloudsAmount[1]);
+            PlayerBehaviour.instance.movementSpeed = PlayerBehaviour.instance.hardMovementSpeed;
+            CapyBallBehaviour.instance.capyBallSpeed = CapyBallBehaviour.instance.hardCapyBallSpeed;
+        }
+
+        for (int i = 0; i < selectedCloudsAmount; i++)
+        {
+            float selectedXPosition = Random.Range(-minMaxXClouds, minMaxXClouds);
+            float selectedYPosition = Random.Range(minimumYClouds, maximumYClouds);
+            GameObject selectedPrefab = cloudsPrefabs[Random.Range(0, cloudsPrefabs.Length)];
+            Collider2D overlap = Physics2D.OverlapBox(new Vector2(selectedXPosition, selectedYPosition), prefabColliderSize, 0f, collisionLayer);
+            if (overlap == null)
+            {
+                selectedPrefab = Instantiate(selectedPrefab, new Vector2(selectedXPosition, selectedYPosition), Quaternion.identity);
+                selectedPrefab.transform.parent = gameObject.transform;
+            }
+            else selectedCloudsAmount += 1;
+            if (selectedCloudsAmount >= 200)
+            {
+                Debug.Log("No free position located in time, breaking loop to prevent crash");
+                break;
+            }
+        }
+
+        bricksActive = gameObject.transform.childCount;
     }
 }
