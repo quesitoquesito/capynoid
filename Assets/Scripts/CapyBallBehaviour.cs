@@ -114,12 +114,6 @@ public class CapyBallBehaviour : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Brick"))
-        {
-            Destroy(collision.gameObject);
-            StartCoroutine(DestroyBricks());
-        }
-
         if (collision.gameObject.CompareTag("Waves"))
         {
             LivesPointsBehaviour.instance.DisplayLives();
@@ -129,6 +123,11 @@ public class CapyBallBehaviour : MonoBehaviour
         {
             ModifyDirection();
         }
+    }
+
+    public void startDestroyBricks()
+    {
+        StartCoroutine(DestroyBricks());
     }
 
     IEnumerator DestroyBricks()
