@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,7 +16,6 @@ public class UIBehaviour : MonoBehaviour
 
     void Start()
     {
-        UIAnimationsBehaviour.instance.isPausing = false;
         UIAnimationsBehaviour.instance.isPaused = false;
         //Change to animation
         UIAnimationsBehaviour.instance.pauseCanvas.gameObject.SetActive(false);
@@ -27,7 +27,7 @@ public class UIBehaviour : MonoBehaviour
         {
             Timer();
         }
-        if (Input.GetKeyDown(KeyCode.Escape) && PlayerBehaviour.instance.hasGameStarted && !UIAnimationsBehaviour.instance.isPausing)
+        if (Input.GetButtonDown("Cancel") && PlayerBehaviour.instance.hasGameStarted)
         {
             if (UIAnimationsBehaviour.instance.isPaused)
             {
@@ -62,6 +62,11 @@ public class UIBehaviour : MonoBehaviour
 
     public void MainMenuButton()
     {
-        //Reload Scene
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void NextLevel()
+    {
+
     }
 }

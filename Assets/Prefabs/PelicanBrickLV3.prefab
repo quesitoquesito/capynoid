@@ -143,9 +143,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ded40052a0465474c877a1a80e9b9cd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pointsWhenBroken: 200
   blockLives: 2
   destroyTime: 0.3
-  changeSpriteTime: 0.2
+  changeSpriteTime: 0.1
   blockBreakAnim: 26
   blockChangeAnimIN: 18
   blockChangeAnimOUT: 27

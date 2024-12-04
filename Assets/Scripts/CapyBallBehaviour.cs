@@ -33,6 +33,8 @@ public class CapyBallBehaviour : MonoBehaviour
 
     [HideInInspector] public Vector2 capyBallStoredDirection;
 
+    public GameObject nextLevelCanvas;
+
     void Awake()
     {
         if (CapyBallBehaviour.instance == null)
@@ -137,8 +139,10 @@ public class CapyBallBehaviour : MonoBehaviour
         if (LevelsBehaviour.instance.bricksActive <= 0)
         {
             LevelsBehaviour.instance.wantedLevelDifficulty += 1;
-            LevelsBehaviour.instance.SelectLevel();
-            Restart();
+            LeanTween.scale(gameObject, Vector2.zero, capyBallSpawnAnimSpeed).setEase(LeanTweenType.easeOutBack).setOnComplete(() =>
+            {
+                UIAnimationsBehaviour.instance.NextLevel();
+            });
         }
         yield return null;
     }

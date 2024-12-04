@@ -143,11 +143,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ded40052a0465474c877a1a80e9b9cd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pointsWhenBroken: 100
   blockLives: 1
   destroyTime: 0.3
   changeSpriteTime: 0
   blockBreakAnim: 26
-  blockChangeAnim: 0
+  blockChangeAnimIN: 0
+  blockChangeAnimOUT: 0
   normalClouds:
   - {fileID: 21300000, guid: 4ed98f446d81b9d418a363fe510c8bc5, type: 3}
   - {fileID: 21300000, guid: d121584df3d1abd44a6fb3eefd295e75, type: 3}

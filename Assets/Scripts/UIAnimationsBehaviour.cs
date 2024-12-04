@@ -8,7 +8,7 @@ public class UIAnimationsBehaviour : MonoBehaviour
     public static UIAnimationsBehaviour instance;
     
     [SerializeField] RectTransform menuBackground;
-    [SerializeField] public RectTransform pauseCanvas;
+    [SerializeField] public GameObject pauseCanvas;
     [SerializeField] Button[] menuButtons; //0 Start - 1 Options - 2 Quit
     //Button locations and intervals SAVE START BUTTON POS AT START and calculate interval with first and second button
     [SerializeField] int startButtonLocation;
@@ -24,10 +24,14 @@ public class UIAnimationsBehaviour : MonoBehaviour
     [SerializeField] LeanTweenType menuAnimType;
 
     //Pause Animations
-    [SerializeField] float slowDownDuration;
-    [HideInInspector] public bool isPausing;
     [HideInInspector] public bool isPaused;
 
+    //Next Level Canvas
+    [SerializeField] GameObject nextLevelCanvas;
+
+    //All Canvas
+    [SerializeField] LeanTweenType canvasAnimationType;
+    [SerializeField] float canvasAnimationSpeed;
     bool continueWithStartup = false;
 
     void Awake()
@@ -40,6 +44,15 @@ public class UIAnimationsBehaviour : MonoBehaviour
         {
             Destroy(this);
         }
+    }
+
+    private void Start()
+    {
+        nextLevelCanvas.transform.localScale = Vector2.zero;
+        pauseCanvas.transform.localScale = Vector2.zero;
+
+        nextLevelCanvas.SetActive(false);
+        pauseCanvas.gameObject.SetActive(false);
     }
 
     public void StartGame()
@@ -75,54 +88,26 @@ public class UIAnimationsBehaviour : MonoBehaviour
     {
         CapyBallBehaviour.instance.capyBallStoredDirection = CapyBallBehaviour.instance.capyBallRB.velocity;
         isPaused = true;
-        //StartCoroutine(PauseGameAnimation());
-    }
-
-    IEnumerator PauseGameAnimation()
-    {
-        isPausing = true;
-        
-        float elapsedTime = 0f;
-
-        while (elapsedTime < slowDownDuration)
-        {
-            elapsedTime += Time.unscaledDeltaTime;
-            Time.timeScale = Mathf.Lerp(1f, 0f, elapsedTime / slowDownDuration);
-            Time.fixedDeltaTime = Time.timeScale * 0.02f;
-            yield return null;
-        }
-        
         pauseCanvas.gameObject.SetActive(true);
-        Time.timeScale = 0f;
-        isPaused = true;
-        isPausing = false;
+        LeanTween.scale(pauseCanvas.gameObject, Vector3.one, canvasAnimationSpeed).setEase(canvasAnimationType).setOnComplete(() =>
+        {
+
+        });
     }
 
     public void ResumeGame()
     {
         isPaused = false;
         CapyBallBehaviour.instance.capyBallRB.velocity = CapyBallBehaviour.instance.capyBallStoredDirection.normalized;
-        //StartCoroutine(ResumeGameAnimation());
     }
 
-    IEnumerator ResumeGameAnimation()
+    public void NextLevel()
     {
-        isPausing = true;
-
-        pauseCanvas.gameObject.SetActive(false);
-
-        float elapsedTime = 0f;
-
-        while (elapsedTime < slowDownDuration)
+        nextLevelCanvas.SetActive(true);
+        LeanTween.scale(nextLevelCanvas, Vector3.one, canvasAnimationSpeed).setEase(canvasAnimationType).setOnComplete(() =>
         {
-            elapsedTime += Time.unscaledDeltaTime;
-            Time.timeScale = Mathf.Lerp(0f, 1f, elapsedTime / slowDownDuration);
-            Time.fixedDeltaTime = Time.timeScale * 0.02f;
-            yield return null;
-        }
-
-        Time.timeScale = 1f;
-        isPaused = false;
-        isPausing = false;
+            LevelsBehaviour.instance.SelectLevel();
+            CapyBallBehaviour.instance.Restart();
+        });
     }
 }

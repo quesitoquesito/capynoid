@@ -7,7 +7,8 @@ public class BricksBehaviour : MonoBehaviour
     SpriteRenderer brickSpriteRenderer;
     int brickID;
     int initialBlockLives;
-    
+
+    [SerializeField] int pointsWhenBroken;
     [SerializeField] int blockLives;
     [SerializeField] float destroyTime;
     [SerializeField] float changeSpriteTime;
@@ -53,6 +54,7 @@ public class BricksBehaviour : MonoBehaviour
                 LeanTween.scale(gameObject, Vector2.zero, destroyTime).setEase(blockBreakAnim).setOnComplete(() =>
                 {
                     Destroy(gameObject);
+                    LivesPointsBehaviour.instance.PointsCounter(pointsWhenBroken);
                     CapyBallBehaviour.instance.startDestroyBricks();
                 });
             }
