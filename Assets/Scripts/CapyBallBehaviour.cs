@@ -66,13 +66,6 @@ public class CapyBallBehaviour : MonoBehaviour
             LaunchBall();
         }
 
-
-        //Debug Restart
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            Restart();
-        }
-
         //Launch Indicator
         if (PlayerBehaviour.instance.isGameActive && !ballLaunched)
         {

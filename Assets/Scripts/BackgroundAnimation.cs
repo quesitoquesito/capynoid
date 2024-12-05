@@ -19,11 +19,18 @@ public class BackgroundAnimation : MonoBehaviour
     void Update()
     {
         float temp = (player.transform.position.x * (1 - effect));
-        float dist = (player.transform.position.x * effect);
+        float distance = (player.transform.position.x * effect);
 
-        transform.position = new Vector3(initialPosition + dist, transform.position.y, transform.position.z);
+        transform.position = new Vector3(initialPosition + distance, transform.position.y, transform.position.z);
 
-        if (temp > initialPosition + size) initialPosition += size;
-        else if (temp < initialPosition - size) initialPosition -= size;
+        if (temp > initialPosition + size)
+        {
+            initialPosition += size;
+        }
+
+        else if (temp < initialPosition - size)
+        {
+            initialPosition -= size;
+        }
     }
 }

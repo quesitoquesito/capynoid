@@ -58,7 +58,7 @@ public class PowerUpsBehaviour : MonoBehaviour
         if (spawnProbability == 1)
         {
             GameObject selectedPowerUp = Instantiate(powerUpsPrefabs[selectedPUToSpawn], new Vector3(powerUpSpawnPosition.x, powerUpSpawnPosition.y, -1f), Quaternion.identity);
-            LeanTween.scale(selectedPowerUp, new Vector3(2, 2, 1), powerUpAnimSpeed).setEase(powerUpAnimType);
+            LeanTween.scale(selectedPowerUp, new Vector3(3, 3, 1), powerUpAnimSpeed).setEase(powerUpAnimType);
         }
     }
 
