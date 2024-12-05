@@ -9,8 +9,7 @@ public class UIAnimationsBehaviour : MonoBehaviour
     
     [SerializeField] RectTransform menuBackground;
     [SerializeField] public GameObject pauseCanvas;
-    [SerializeField] Button[] menuButtons; //0 Start - 1 Options - 2 Quit
-    //Button locations and intervals SAVE START BUTTON POS AT START and calculate interval with first and second button
+    [SerializeField] Button[] menuButtons;
     [SerializeField] int startButtonLocation;
     [SerializeField] float buttonPosOutOfSight;
     [SerializeField] float menuBackgroundPosOutOfSight;
@@ -137,7 +136,23 @@ public class UIAnimationsBehaviour : MonoBehaviour
 
     public void GameOver()
     {
+        PlayerBehaviour.instance.isGameActive = false;
         gameOverCanvas.SetActive(true);
         LeanTween.moveLocalY(gameOverCanvas, 0f, canvasAnimationSpeed).setEase(canvasAnimationTypeDOWN);
+    }
+
+    public void ResetGame()
+    {
+        PlayerBehaviour.instance.gameObject.transform.position = new Vector3(0, PlayerBehaviour.instance.gameObject.transform.position.y, PlayerBehaviour.instance.gameObject.transform.position.z);
+        LivesPointsBehaviour.instance.lives = 3;
+        LivesPointsBehaviour.instance.livesCount.text = "Vidas restantes: " + LivesPointsBehaviour.instance.lives.ToString();
+        LivesPointsBehaviour.instance.currentScore = 0;
+        LivesPointsBehaviour.instance.pointsText.text = LivesPointsBehaviour.instance.currentScore.ToString();
+        LevelsBehaviour.instance.wantedLevelDifficulty = 0;
+        LevelsBehaviour.instance.SelectLevel();
+        CapyBallBehaviour.instance.Restart();
+        UIBehaviour.instance.timer = 0;
+        LeanTween.moveLocalY(gameOverCanvas, 1100f, canvasAnimationSpeed).setEase(canvasAnimationTypeUP);
+        PlayerBehaviour.instance.isGameActive = true;
     }
 }

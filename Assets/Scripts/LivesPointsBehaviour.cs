@@ -8,11 +8,11 @@ public class LivesPointsBehaviour : MonoBehaviour
     public static LivesPointsBehaviour instance;
 
     int highScore;
-    int currentScore;
-    [SerializeField] TextMeshProUGUI pointsText;
+    [HideInInspector] public int currentScore;
+    public TextMeshProUGUI pointsText;
 
-    [SerializeField] TextMeshProUGUI livesCount;
-    [SerializeField] int lives;
+    public TextMeshProUGUI livesCount;
+    public int lives;
      void Awake()
     {
         if (LivesPointsBehaviour.instance == null)
@@ -41,8 +41,13 @@ public class LivesPointsBehaviour : MonoBehaviour
         else if (lives > 0)
         {
             CapyBallBehaviour.instance.Restart();
-            Debug.Log("Restart");
         }
+    }
+
+    public void AddLives()
+    {
+        lives += 1;
+        livesCount.text = "Vidas restantes: " + lives.ToString();
     }
 
     public void PointsCounter(int scoreAdd)

@@ -551,7 +551,7 @@ GameObject:
   - component: {fileID: 232585304}
   - component: {fileID: 232585303}
   m_Layer: 5
-  m_Name: QuitText
+  m_Name: RestartText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -574,7 +574,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 340, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &232585303
 MonoBehaviour:
@@ -596,7 +596,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Salir
+  m_text: Reintentar
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 98f4929a4cb03214fbd4c9737315a1a4, type: 2}
   m_sharedMaterial: {fileID: -8104737623706216224, guid: 98f4929a4cb03214fbd4c9737315a1a4, type: 2}
@@ -623,8 +623,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
-  m_fontSizeBase: 60
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1092,10 +1092,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   powerUpsPrefabs:
   - {fileID: 3647155162285115148, guid: 91a237308d932d74bb15ff5db2574741, type: 3}
+  - {fileID: 2199011119914602138, guid: 9bcad68c468d7f54ea32f93deacdcedc, type: 3}
   powerUpAnimType: 27
   powerUpAnimSpeed: 0.2
   slowBallSpeedToDiscount: 4
   slowBallDuration: 10
+  invertedCrocDuration: 10
+  slowBallProb: 0200000003000000
+  invertedCrocProb: 0300000005000000
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -3376,7 +3380,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: 00:00:00
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 98f4929a4cb03214fbd4c9737315a1a4, type: 2}
   m_sharedMaterial: {fileID: -8104737623706216224, guid: 98f4929a4cb03214fbd4c9737315a1a4, type: 2}
@@ -3761,6 +3765,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a81e512b9aae3504baf7068b5d9ada0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentScore: 0
   pointsText: {fileID: 1795709611}
   livesCount: {fileID: 1950365939}
   lives: 3
@@ -3962,7 +3967,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 98f4929a4cb03214fbd4c9737315a1a4, type: 2}
   m_sharedMaterial: {fileID: -8104737623706216224, guid: 98f4929a4cb03214fbd4c9737315a1a4, type: 2}
@@ -4346,7 +4351,7 @@ GameObject:
   - component: {fileID: 1906095727}
   - component: {fileID: 1906095726}
   m_Layer: 5
-  m_Name: QuitButton
+  m_Name: RestartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4416,9 +4421,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2049907030}
-        m_TargetAssemblyTypeName: UIBehaviour, Assembly-CSharp
-        m_MethodName: Quit
+      - m_Target: {fileID: 2049907025}
+        m_TargetAssemblyTypeName: UIAnimationsBehaviour, Assembly-CSharp
+        m_MethodName: ResetGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4905,6 +4910,7 @@ MonoBehaviour:
   isGameActive: 0
   hasGameStarted: 0
   crocPaddle: {fileID: 1788297323}
+  isInverted: 0
 --- !u!4 &1930865181
 Transform:
   m_ObjectHideFlags: 0
@@ -5389,7 +5395,7 @@ MonoBehaviour:
   - {fileID: 1793352906}
   - {fileID: 586320546}
   startButtonLocation: 0
-  buttonPosOutOfSight: -590
+  buttonPosOutOfSight: -700
   menuBackgroundPosOutOfSight: 1090
   buttonInterval: 0
   buttonAnimSpeed: 0.5
@@ -5507,6 +5513,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuCanvas: {fileID: 2049907029}
   timerText: {fileID: 1671602757}
+  timer: 0
 --- !u!1 &2060397812
 GameObject:
   m_ObjectHideFlags: 0

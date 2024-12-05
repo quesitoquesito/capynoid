@@ -14,9 +14,15 @@ public class PowerUpsBehaviour : MonoBehaviour
     //Slow Ball PowerUp
     [SerializeField] float slowBallSpeedToDiscount;
     [SerializeField] float slowBallDuration;
+    //Inverted Croc
+    [SerializeField] float invertedCrocDuration;
+    //Probabilities
+    [SerializeField] int[] slowBallProb;
+    [SerializeField] int[] invertedCrocProb;
 
     bool slowApplied;
-
+    bool invertedApplied;
+    int spawnProbability;
     private void Awake()
     {
         if (PowerUpsBehaviour.instance == null)
@@ -32,14 +38,26 @@ public class PowerUpsBehaviour : MonoBehaviour
     void Start()
     {
         slowApplied = false;
+        invertedApplied = false;
     }
 
     public void spawnRandomPowerUp(Vector2 powerUpSpawnPosition)
     {
-        int spawnPosibility = Random.Range(1, 3);
-        if (spawnPosibility == 1)
+        int selectedPUToSpawn = Random.Range(0, powerUpsPrefabs.Length);
+        if (selectedPUToSpawn == 0)
         {
-            GameObject selectedPowerUp = Instantiate(powerUpsPrefabs[Random.Range(0, powerUpsPrefabs.Length)], new Vector3(powerUpSpawnPosition.x, powerUpSpawnPosition.y, -1f), Quaternion.identity);
+            spawnProbability = Random.Range(slowBallProb[0], slowBallProb[1]);
+            spawnProbability = Random.Range(1, spawnProbability);
+        }
+        else if (selectedPUToSpawn == 1)
+        {
+            spawnProbability = Random.Range(invertedCrocProb[0], invertedCrocProb[1]);
+            spawnProbability = Random.Range(1, spawnProbability);
+        }
+
+        if (spawnProbability == 1)
+        {
+            GameObject selectedPowerUp = Instantiate(powerUpsPrefabs[selectedPUToSpawn], new Vector3(powerUpSpawnPosition.x, powerUpSpawnPosition.y, -1f), Quaternion.identity);
             LeanTween.scale(selectedPowerUp, new Vector3(2, 2, 1), powerUpAnimSpeed).setEase(powerUpAnimType);
         }
     }
@@ -60,6 +78,33 @@ public class PowerUpsBehaviour : MonoBehaviour
             CapyBallBehaviour.instance.capyBallSpeed = tempCapyBallSpeed;
             slowApplied = false;
             yield return null;
+        }
+        else if (slowApplied)
+        {
+            LivesPointsBehaviour.instance.currentScore += 100;
+            LivesPointsBehaviour.instance.pointsText.text = LivesPointsBehaviour.instance.currentScore.ToString();
+        }
+    }
+
+    public void CallInvertedCroc()
+    {
+        StartCoroutine (InvertedCroc());
+    }
+
+    IEnumerator InvertedCroc()
+    {
+        if (!invertedApplied)
+        {
+            invertedApplied = true;
+            PlayerBehaviour.instance.isInverted = true;
+            yield return new WaitForSeconds(invertedCrocDuration);
+            PlayerBehaviour.instance.isInverted = false;
+            invertedApplied = false;
+            yield return null;
+        }
+        else if (invertedApplied)
+        {
+            LivesPointsBehaviour.instance.AddLives();
         }
     }
 }

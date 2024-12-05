@@ -169,17 +169,12 @@ public class CapyBallBehaviour : MonoBehaviour
     public void Restart()
     {
         oscillationTime = 0f;
-        //Set velocity to 0
         capyBallRB.velocity = Vector2.zero;
-        //Disable collider to launch
         PlayerBehaviour.instance.GetComponent<Collider2D>().enabled = false;
-        //Set CrocPaddle as parent
         gameObject.transform.parent = player;
-        //Animation
         capyBallRB.gameObject.transform.localScale = Vector2.zero;
         gameObject.transform.localPosition = new Vector2(0.16f, 0.66f);
         LeanTween.scale(gameObject,Vector2.one, capyBallSpawnAnimSpeed).setEase(capyBallSpawnAnimType);
-        //Set to launch ball
         ballLaunched = false;
         launchIndicator.SetActive(true);
     }
@@ -193,13 +188,11 @@ public class CapyBallBehaviour : MonoBehaviour
         {
             modifiedAddedV = Random.value < 0.5f ? modifiedAddedV : -modifiedAddedV;
             capyBallRB.velocity += new Vector2(modifiedAddedV, 0f);
-            Debug.Log("Calling VelocityFix in X");
         }
         if (Mathf.Abs(capyBallRB.velocity.y) < minimumV)
         {
             modifiedAddedV = Random.value < 0.5f ? modifiedAddedV : -modifiedAddedV;
             capyBallRB.velocity += new Vector2(0f, modifiedAddedV);
-            Debug.Log("Calling VelocityFix in Y");
         }
     }
 }

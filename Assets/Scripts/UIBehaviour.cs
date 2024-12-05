@@ -6,17 +6,29 @@ using UnityEngine.SceneManagement;
 
 public class UIBehaviour : MonoBehaviour
 {
+    public static UIBehaviour instance;
+    
     [SerializeField] RectTransform mainMenuCanvas;
     [SerializeField] TextMeshProUGUI timerText;
-    float timer;
+    [HideInInspector] public float timer;
     bool completePause;
 
     [HideInInspector] Vector2 capyDirection;
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
 
     void Start()
     {
         UIAnimationsBehaviour.instance.isPaused = false;
-        //Change to animation
         UIAnimationsBehaviour.instance.pauseCanvas.gameObject.SetActive(false);
     }
 
@@ -61,10 +73,5 @@ public class UIBehaviour : MonoBehaviour
     public void MainMenuButton()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    public void NextLevel()
-    {
-
     }
 }

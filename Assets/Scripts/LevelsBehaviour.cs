@@ -84,7 +84,6 @@ public class LevelsBehaviour : MonoBehaviour
             else selectedCloudsAmount += 1;
             if (selectedCloudsAmount >= 200)
             {
-                Debug.Log("No free position located in time, breaking loop to prevent crash");
                 break;
             }
         }

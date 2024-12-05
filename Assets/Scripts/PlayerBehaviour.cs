@@ -19,6 +19,10 @@ public class PlayerBehaviour : MonoBehaviour
 
     bool isFacingRight = true;
 
+    public bool isInverted;
+
+    float movementDirection;
+
     void Awake()
     {
         if (PlayerBehaviour.instance == null)
@@ -53,6 +57,12 @@ public class PlayerBehaviour : MonoBehaviour
             Destroy (collision.gameObject);
             PowerUpsBehaviour.instance.CallSlowBall();
         }
+
+        if (collision.gameObject.name.Contains("Inverted"))
+        {
+            Destroy(collision.gameObject);
+            PowerUpsBehaviour.instance.CallInvertedCroc();
+        }
     }
 
     void PlayerMovement()
@@ -60,7 +70,12 @@ public class PlayerBehaviour : MonoBehaviour
         if (isGameActive && hasGameStarted)
         {
             Vector3 gameObjectPosition = gameObject.transform.localPosition;
-            gameObjectPosition.x = Mathf.Clamp(gameObjectPosition.x + Input.GetAxisRaw("Horizontal") * movementSpeed * Time.deltaTime, -colliderInArea, colliderInArea);
+            movementDirection = Input.GetAxis("Horizontal");
+            if (isInverted)
+            {
+                movementDirection = -movementDirection;
+            }
+            gameObjectPosition.x = Mathf.Clamp(gameObjectPosition.x + (movementDirection) * movementSpeed * Time.deltaTime, -colliderInArea, colliderInArea);
             transform.localPosition = gameObjectPosition;
         }
     }
