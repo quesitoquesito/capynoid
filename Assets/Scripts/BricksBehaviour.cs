@@ -39,11 +39,6 @@ public class BricksBehaviour : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        
-    }
-
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("CapyBall"))
@@ -56,6 +51,7 @@ public class BricksBehaviour : MonoBehaviour
                     Destroy(gameObject);
                     LivesPointsBehaviour.instance.PointsCounter(pointsWhenBroken);
                     CapyBallBehaviour.instance.startDestroyBricks();
+                    PowerUpsBehaviour.instance.spawnRandomPowerUp(gameObject.transform.position);
                 });
             }
             if (blockLives == initialBlockLives - 1 && blockLives != 0)

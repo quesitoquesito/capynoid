@@ -29,18 +29,13 @@ public class LivesPointsBehaviour : MonoBehaviour
         currentScore = 0;
     }
 
-    void Update()
-    {
-        
-    }
-
     public void DisplayLives()
     {
         lives -= 1;
-        livesCount.text = lives.ToString();
+        livesCount.text = "Vidas restantes: " + lives.ToString();
         if (lives == 0)
         {
-            Debug.Log("Game Over");
+            UIAnimationsBehaviour.instance.GameOver();
             CapyBallBehaviour.instance.capyBallRB.velocity = Vector2.zero;
         }
         else if (lives > 0)

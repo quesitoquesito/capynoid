@@ -35,6 +35,11 @@ public class CapyBallBehaviour : MonoBehaviour
 
     public GameObject nextLevelCanvas;
 
+    [SerializeField] AudioSource sfxAudioSource;
+    [SerializeField] AudioClip brickSFX;
+    [SerializeField] AudioClip powerUpSFX;
+    [SerializeField] AudioClip restartSFX;
+
     void Awake()
     {
         if (CapyBallBehaviour.instance == null)
@@ -110,20 +115,34 @@ public class CapyBallBehaviour : MonoBehaviour
             gameObject.transform.parent = null;
             capyBallRB.velocity = capyBallVector.normalized * capyBallSpeed;
             ballLaunched = true;
-            PlayerBehaviour.instance.crocPaddle.GetComponent<Collider2D>().enabled = true;
+            PlayerBehaviour.instance.GetComponent<Collider2D>().enabled = true;
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.gameObject.CompareTag("Brick"))
+        {
+            sfxAudioSource.clip = brickSFX;
+            sfxAudioSource.Play();
+        }
+
         if (collision.gameObject.CompareTag("Waves"))
         {
+            sfxAudioSource.clip = restartSFX;
+            sfxAudioSource.Play();
             LivesPointsBehaviour.instance.DisplayLives();
         }
 
         if (!collision.gameObject.CompareTag("Waves"))
         {
             ModifyDirection();
+        }
+
+        if (collision.gameObject.CompareTag("PowerUp"))
+        {
+            sfxAudioSource.clip = powerUpSFX;
+            sfxAudioSource.Play();
         }
     }
 
@@ -153,7 +172,7 @@ public class CapyBallBehaviour : MonoBehaviour
         //Set velocity to 0
         capyBallRB.velocity = Vector2.zero;
         //Disable collider to launch
-        PlayerBehaviour.instance.crocPaddle.GetComponent<Collider2D>().enabled = false;
+        PlayerBehaviour.instance.GetComponent<Collider2D>().enabled = false;
         //Set CrocPaddle as parent
         gameObject.transform.parent = player;
         //Animation

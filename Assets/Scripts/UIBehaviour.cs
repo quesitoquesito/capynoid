@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -56,8 +55,7 @@ public class UIBehaviour : MonoBehaviour
         int hours = (int)(timer / 3600);
         int minutes = (int)((timer % 3600) / 60);
         int seconds = (int)(timer % 60);
-        int miliseconds = (int)((timer * 100) % 100);
-        timerText.text = $"{hours}:{minutes:00}:{seconds:00}:{miliseconds:00}";
+        timerText.text = $"{hours:00}:{minutes:00}:{seconds:00}";
     }
 
     public void MainMenuButton()

@@ -25,14 +25,19 @@ public class UIAnimationsBehaviour : MonoBehaviour
 
     //Pause Animations
     [HideInInspector] public bool isPaused;
+    bool animationRunning;
 
     //Next Level Canvas
     [SerializeField] GameObject nextLevelCanvas;
 
     //All Canvas
-    [SerializeField] LeanTweenType canvasAnimationType;
+    [SerializeField] LeanTweenType canvasAnimationTypeUP;
+    [SerializeField] LeanTweenType canvasAnimationTypeDOWN;
     [SerializeField] float canvasAnimationSpeed;
     bool continueWithStartup = false;
+
+    //Game Over
+    [SerializeField] GameObject gameOverCanvas;
 
     void Awake()
     {
@@ -48,11 +53,9 @@ public class UIAnimationsBehaviour : MonoBehaviour
 
     private void Start()
     {
-        nextLevelCanvas.transform.localScale = Vector2.zero;
-        pauseCanvas.transform.localScale = Vector2.zero;
-
         nextLevelCanvas.SetActive(false);
         pauseCanvas.gameObject.SetActive(false);
+        animationRunning = false;
     }
 
     public void StartGame()
@@ -86,28 +89,55 @@ public class UIAnimationsBehaviour : MonoBehaviour
 
     public void PauseGame()
     {
-        CapyBallBehaviour.instance.capyBallStoredDirection = CapyBallBehaviour.instance.capyBallRB.velocity;
-        isPaused = true;
-        pauseCanvas.gameObject.SetActive(true);
-        LeanTween.scale(pauseCanvas.gameObject, Vector3.one, canvasAnimationSpeed).setEase(canvasAnimationType).setOnComplete(() =>
+        if (!animationRunning)
         {
-
-        });
+            animationRunning = true;
+            CapyBallBehaviour.instance.capyBallStoredDirection = CapyBallBehaviour.instance.capyBallRB.velocity;
+            PlayerBehaviour.instance.isGameActive = false;
+            isPaused = true;
+            pauseCanvas.gameObject.SetActive(true);
+            LeanTween.moveLocalY(pauseCanvas.gameObject, 0f, canvasAnimationSpeed).setEase(canvasAnimationTypeDOWN).setOnComplete(() =>
+            {
+                animationRunning = false;
+            });
+        }
     }
 
     public void ResumeGame()
     {
-        isPaused = false;
-        CapyBallBehaviour.instance.capyBallRB.velocity = CapyBallBehaviour.instance.capyBallStoredDirection.normalized;
+        if (!animationRunning)
+        {
+            animationRunning = true;
+            LeanTween.moveLocalY(pauseCanvas.gameObject, 1100f, canvasAnimationSpeed).setEase(canvasAnimationTypeUP).setOnComplete(() =>
+            {
+                pauseCanvas.gameObject.SetActive(false);
+                PlayerBehaviour.instance.isGameActive = true;
+                CapyBallBehaviour.instance.capyBallRB.velocity = CapyBallBehaviour.instance.capyBallStoredDirection.normalized;
+                isPaused = false;
+                animationRunning = false;
+            });
+        }
     }
 
     public void NextLevel()
     {
-        nextLevelCanvas.SetActive(true);
-        LeanTween.scale(nextLevelCanvas, Vector3.one, canvasAnimationSpeed).setEase(canvasAnimationType).setOnComplete(() =>
+        if (!animationRunning)
         {
-            LevelsBehaviour.instance.SelectLevel();
-            CapyBallBehaviour.instance.Restart();
-        });
+            animationRunning = true;
+            nextLevelCanvas.SetActive(true);
+            LeanTween.moveLocalY(nextLevelCanvas, 0f, canvasAnimationSpeed).setEase(canvasAnimationTypeDOWN).setOnComplete(() =>
+            {
+                LevelsBehaviour.instance.SelectLevel();
+                CapyBallBehaviour.instance.Restart();
+                animationRunning = false;
+                LeanTween.moveLocalY(nextLevelCanvas, 1100f, canvasAnimationSpeed).setEase(canvasAnimationTypeUP);
+            });
+        }
+    }
+
+    public void GameOver()
+    {
+        gameOverCanvas.SetActive(true);
+        LeanTween.moveLocalY(gameOverCanvas, 0f, canvasAnimationSpeed).setEase(canvasAnimationTypeDOWN);
     }
 }

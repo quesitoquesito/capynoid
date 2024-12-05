@@ -13,11 +13,6 @@ public class WorldAnimationsBehaviour : MonoBehaviour
         WaterAnimation();
     }
 
-    void Update()
-    {
-        
-    }
-
     void WaterAnimation()
     {
         LeanTween.moveLocalX(wavesSprite, waterPositionTo, waterAnimSpeed).setEase(waterAnimType).setLoopPingPong();

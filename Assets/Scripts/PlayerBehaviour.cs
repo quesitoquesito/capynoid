@@ -34,15 +34,24 @@ public class PlayerBehaviour : MonoBehaviour
     {
         isGameActive = false;
         hasGameStarted = false;
-        crocPaddle.GetComponent<Collider2D>().enabled = false;
+        GetComponent<Collider2D>().enabled = false;
     }
 
     void Update()
     {
         PlayerMovement();
-        if ((Input.GetAxis("Horizontal") > 0 && !isFacingRight) || (Input.GetAxis("Horizontal") < 0 && isFacingRight))
+        if ((Input.GetAxis("Horizontal") > 0 && !isFacingRight) && isGameActive || (Input.GetAxis("Horizontal") < 0 && isFacingRight) && isGameActive)
         {
             FlipPlayer();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.name.Contains("Slow"))
+        {
+            Destroy (collision.gameObject);
+            PowerUpsBehaviour.instance.CallSlowBall();
         }
     }
 
